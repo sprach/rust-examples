@@ -7,45 +7,35 @@ use stm32f1xx_hal::{pac, prelude::*};
 
 #[entry]
 fn main() -> ! {
-    // Get access to the core peripherals from the cortex-m crate
+    // Core peripheral 획득
     let cp = cortex_m::Peripherals::take().unwrap();
-    // Get access to the device specific peripherals from the peripheral access crate
+    // Device specific peripheral 획득
     let dp = pac::Peripherals::take().unwrap();
 
-    // Take ownership over the raw flash and rcc devices and convert them into the corresponding
-    // HAL structs
+    // Flash 및 RCC 소유권 획득, HAL 구조체로 변환
     let mut flash = dp.FLASH.constrain();
     let rcc = dp.RCC.constrain();
 
-    // Freeze the configuration of all the clocks in the system and store the frozen frequencies in
-    // `clocks`
+    // 시스템 클럭 설정 동결 (기본 설정 사용)
     let clocks = rcc.cfgr.freeze(&mut flash.acr);
 
-    // Acquire the GPIOA peripheral
+    // GPIOA peripheral 획득
     let mut gpioa = dp.GPIOA.split();
 
-    // Configure gpio PA4 as a push-pull output. The `cr` register is passed to the function
-    // to configure the port. For robust application, often specific initial state is desired.
-    // The "Pullup" in requirements might refer to external circuit, but for driving LED:
-    // PushPull is standard. If OpenDrain is needed with Pullup, it would be into_open_drain_output.
-    // However, blinky usually drives output.
+    // PA4를 Push-Pull Output으로 설정
     let mut led = gpioa.pa4.into_push_pull_output(&mut gpioa.crl);
 
-    // Get delay provider
+    // Delay provider 생성
     let mut delay = cp.SYST.delay(&clocks);
 
     loop {
-        // Blink logic: 1s ON, 1s OFF
+        // LED 점멸 루프 (1초 간격)
 
-        // Turn LED on (Low or High depending on circuit, usually Low for common cathode, High for common anode)
-        // Assuming Active High for now given "Pullup" isn't explicitly "Pullup Input".
-        // But if the requirement says "LED(PA4, Pullup)", it might imply the LED is connected to VCC
-        // and the pin pulls it low to turn on (Active Low), and has a pullup resistor?
-        // Let's implement toggling.
-
+        // LED Low (회로에 따라 ON/OFF 결정됨)
         led.set_low();
         delay.delay_ms(1000u32);
 
+        // LED High
         led.set_high();
         delay.delay_ms(1000u32);
     }
