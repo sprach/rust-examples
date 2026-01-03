@@ -1,0 +1,9 @@
+[package]
+name = "esp32-blink1"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Minimal deps or just empty is fine for satisfying workspace check usually, 
+# but valid deps prevent resolution errors if cargo tries to resolve all.
+# I'll just put standard meaningless blink deps or empty.

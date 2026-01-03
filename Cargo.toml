@@ -1,0 +1,16 @@
+[workspace]
+# 워크스페이스에 포함될 하위 프로젝트 경로들을 지정함
+members = [
+    "firmwares/stm32f103c8t6/*",
+    "firmwares/esp32/*",
+    "apps/rust/*",
+]
+# resolver = "2"
+
+# 모든 멤버 프로젝트에서 공유할 릴리스 프로필 설정 (바이너리 크기 최적화)
+[profile.release]
+codegen-units = 1 # 컴파일 속도는 느려지지만 최적화 효율이 높음
+debug = true      # 릴리스 빌드에서도 디버그 정보를 포함 (디버깅 용이)
+lto = true        # Link Time Optimization을 활성화하여 바이너리 크기 최소화
+opt-level = "z"   # 코드 크기 최적화에 집중 (임베디드에 필수)
+panic = "abort"   # 패닉 발생 시 스택 풀기(unwinding)를 하지 않아 용량 절감

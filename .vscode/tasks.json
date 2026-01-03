@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build STM32F1 Firmware",
+            "type": "shell",
+            "command": ".\\make_fw.ps1",
+            "args": [],
+            "options": {
+                "cwd": "${workspaceFolder}/firmwares/stm32f103c8t6/01-blink1"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": false
+            }
+        }
+    ]
+}
