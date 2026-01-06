@@ -5,7 +5,7 @@ members = [
     "firmwares/esp32/*",
     "apps/rust/*",
 ]
-# resolver = "2"
+resolver = "2"
 
 # 모든 멤버 프로젝트에서 공유할 릴리스 프로필 설정 (바이너리 크기 최적화)
 [profile.release]
@@ -14,3 +14,6 @@ debug = true      # 릴리스 빌드에서도 디버그 정보를 포함 (디버
 lto = true        # Link Time Optimization을 활성화하여 바이너리 크기 최소화
 opt-level = "z"   # 코드 크기 최적화에 집중 (임베디드에 필수)
 panic = "abort"   # 패닉 발생 시 스택 풀기(unwinding)를 하지 않아 용량 절감
+
+[profile.dev]
+panic = "abort"   # 디버그 빌드에서도 unwinding 방지 (필수)

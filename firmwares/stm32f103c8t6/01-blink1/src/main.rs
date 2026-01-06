@@ -58,12 +58,22 @@ fn main() -> ! {
     // Delay provider 생성
     let mut delay = cp.SYST.delay(&clocks);
 
+    #[cfg(debug_assertions)]
+    let mut led_count: u32 = 0;
+
     loop {
         // LED 점멸 루프 (1초 간격)
 
         // LED ON (Active Low)
-        led.set_low();
+        #[cfg(debug_assertions)]
+        {
+            led_count += 1;
+            writeln!(serial, "LED ON (Count: {})\r", led_count).unwrap();
+        }
+        #[cfg(not(debug_assertions))]
         writeln!(serial, "LED ON\r").unwrap();
+
+        led.set_low();
         delay.delay_ms(1000u32);
 
         // LED OFF (Active Low)

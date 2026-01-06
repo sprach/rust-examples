@@ -72,6 +72,15 @@ cargo build --release
 ### 3.3 출력 파일
 - **BIN**: `target/thumbv7m-none-eabi/release/f103-blink1_v0102.bin` (펌웨어 배포용)
 
+### 3.4 디버깅 (Debugging)
+VS Code에서 `F5` 키를 통해 바로 디버깅이 가능합니다. (`probe-rs` 사용)
+
+1.  **Run and Debug (Ctrl+Shift+D)** 패널로 이동
+2.  **Debug (probe-rs)**: 개발용 (브레이크포인트, 변수 확인 가능, 최적화 끔)
+3.  **Release (probe-rs)**: 배포용 테스트 (최적화 됨, 브레이크포인트 제한적)
+
+> **Tip**: `main.rs`의 `led_count` 변수는 `Debug` 모드에서만 활성화됩니다.
+
 ---
 
 ## 4. 주의사항 및 참고 (Precautions)
