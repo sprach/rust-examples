@@ -1,4 +1,4 @@
-$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Continue"
 
 # 1. Read Cargo.toml
 $cargoToml = Get-Content -Path "Cargo.toml" -Raw
@@ -6,7 +6,8 @@ $cargoToml = Get-Content -Path "Cargo.toml" -Raw
 # 2. Extract Name and Version (Simple Regex)
 if ($cargoToml -match 'name\s*=\s*"([^"]+)"') {
     $packageName = $matches[1]
-} else {
+}
+else {
     Write-Error "Could not find package name in Cargo.toml"
 }
 
@@ -14,7 +15,8 @@ if ($cargoToml -match 'version\s*=\s*"(\d+)\.(\d+)\.(\d+)"') {
     $major = $matches[1]
     $minor = $matches[2]
     $patch = $matches[3]
-} else {
+}
+else {
     Write-Error "Could not find version in Cargo.toml"
 }
 
@@ -24,11 +26,11 @@ if ($cargoToml -match 'version\s*=\s*"(\d+)\.(\d+)\.(\d+)"') {
 $patchFormatted = "{0:D2}" -f [int]$patch
 $outputName = "f103-${packageName}_v${major}${minor}${patchFormatted}.bin"
 
-Write-Host "Target Firmware Name: $outputName"
+Write-Output "Target Firmware Name: $outputName"
 
 # 4. Build Release
-Write-Host "Building firmware..."
-cargo build --release --package $packageName
+Write-Output "Building firmware..."
+cargo build --release --package $packageName 2>&1 | ForEach-Object { "$_" } | Write-Output
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 # 5. Define Paths
@@ -54,11 +56,54 @@ if (-not (Test-Path $elfPath)) {
 }
 
 # 6. Convert to BIN
-Write-Host "Converting to binary..."
-arm-none-eabi-objcopy -O binary "$elfPath" "$binPath"
+Write-Output "Converting to binary..."
+arm-none-eabi-objcopy -O binary "$elfPath" "$binPath" 2>&1 | ForEach-Object { "$_" } | Write-Output
+
+
 
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "SUCCESS: Firmware created at $binPath"
-} else {
+    Write-Output "SUCCESS: Firmware created at $binPath"
+    
+    # 7. Show Resource Usage (PlatformIO Style)
+    Write-Output "`n[Resource Usage]"
+    try {
+        $sizeOutput = arm-none-eabi-size "$elfPath" | Select-Object -Last 1
+        # Output format: text data bss dec hex filename
+        $parts = $sizeOutput -split '\s+' | Where-Object { $_ -ne "" }
+        if ($parts.Count -ge 3) {
+            $text = [int]$parts[0]
+            $data = [int]$parts[1]
+            $bss = [int]$parts[2]
+
+            # STM32F103C8T6 Specs
+            $maxFlash = 65536 # 64KB
+            $maxRam = 20480 # 20KB
+
+            $usedFlash = $text + $data
+            $usedRam = $data + $bss
+
+            $flashPercent = ($usedFlash / $maxFlash) * 100
+            $ramPercent = ($usedRam / $maxRam) * 100
+
+            function Get-ProgressBar {
+                param ($percent)
+                $barLen = 20
+                $filled = [math]::Round(($percent / 100) * $barLen)
+                $empty = $barLen - $filled
+                return "[" + ("=" * $filled) + (" " * $empty) + "]"
+            }
+
+            $ramBar = Get-ProgressBar $ramPercent
+            $flashBar = Get-ProgressBar $flashPercent
+
+            Write-Output ("RAM:   {0} {1:N1}% (used {2} bytes from {3} bytes)" -f $ramBar, $ramPercent, $usedRam, $maxRam)
+            Write-Output ("Flash: {0} {1:N1}% (used {2} bytes from {3} bytes)" -f $flashBar, $flashPercent, $usedFlash, $maxFlash)
+        }
+    }
+    catch {
+        Write-Warning "To see memory usage, ensure 'arm-none-eabi-size' is in your PATH."
+    }
+}
+else {
     Write-Error "Failed to create binary file."
 }
