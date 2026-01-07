@@ -7,7 +7,7 @@
             "command": ".\\make_fw.ps1",
             "args": [],
             "options": {
-                "cwd": "${workspaceFolder}/firmwares/stm32f103c8t6/01-blink1"
+                "cwd": "${workspaceFolder}/firmwares/stm32f103c8t6/01_blink1_stm32"
             },
             "group": {
                 "kind": "build",
@@ -32,10 +32,10 @@
             "args": [
                 "build",
                 "--package",
-                "blink1"
+                "blink1_stm32"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/firmwares/stm32f103c8t6/01-blink1"
+                "cwd": "${workspaceFolder}/firmwares/stm32f103c8t6/01_blink1_stm32"
             },
             "group": {
                 "kind": "build",

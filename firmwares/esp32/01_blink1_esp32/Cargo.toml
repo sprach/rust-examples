@@ -1,5 +1,5 @@
 [package]
-name = "esp32-blink1"
+name = "blink1_esp32"
 version = "0.1.0"
 edition = "2021"
 

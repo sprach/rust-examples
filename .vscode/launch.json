@@ -14,7 +14,7 @@
             },
             "coreConfigs": [
                 {
-                    "programBinary": "target/thumbv7m-none-eabi/debug/blink1"
+                    "programBinary": "target/thumbv7m-none-eabi/debug/blink1_stm32"
                 }
             ],
             "preLaunchTask": "Build STM32F1 Firmware (Debug)"
@@ -32,7 +32,7 @@
             },
             "coreConfigs": [
                 {
-                    "programBinary": "target/thumbv7m-none-eabi/release/blink1"
+                    "programBinary": "target/thumbv7m-none-eabi/release/blink1_stm32"
                 }
             ],
             "preLaunchTask": "Build STM32F1 Firmware"
@@ -43,7 +43,7 @@
             "request": "launch",
             "servertype": "openocd",
             "cwd": "${workspaceFolder}",
-            "executable": "target/thumbv7m-none-eabi/release/blink1",
+            "executable": "target/thumbv7m-none-eabi/release/blink1_stm32",
             "device": "STM32F103C8",
             "configFiles": [
                 "interface/stlink.cfg",

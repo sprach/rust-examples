@@ -1,4 +1,4 @@
-﻿# Project: Blink1
+﻿# Project: Blink1 STM32
 
 STM32F103C8T6 펌웨어 개발 프로젝트입니다.
 LED(PA4)가 1초마다 깜빡이는 기능을 수행합니다.
@@ -62,7 +62,7 @@ LED(PA4)가 1초마다 깜빡이는 기능을 수행합니다.
 - **기능 개선**:
     - **Resource Usage 표시**: 빌드 성공 시 RAM/Flash 사용량 및 비율을 시각적으로 표시합니다.
     - **Log Redirection 지원**: `./make_fw.ps1 > build.log`와 같이 실행하면 Warning/Error를 포함한 모든 로그를 파일로 저장할 수 있습니다.
-- **결과물**: `target/thumbv7m-none-eabi/release/f103-blink1_vXXXX.bin`
+- **결과물**: `target/thumbv7m-none-eabi/release/f103-blink1_stm32_vXXXX.bin`
 
 #### 방법 3: 수동 Cargo 빌드 (ELF 파일만 생성)
 ```bash
@@ -70,7 +70,7 @@ cargo build --release
 ```
 
 ### 3.3 출력 파일
-- **BIN**: `target/thumbv7m-none-eabi/release/f103-blink1_v0102.bin` (펌웨어 배포용)
+- **BIN**: `target/thumbv7m-none-eabi/release/f103-blink1_stm32_v0102.bin` (펌웨어 배포용)
 
 ### 3.4 디버깅 (Debugging)
 VS Code에서 `F5` 키를 통해 바로 디버깅이 가능합니다. (`probe-rs` 사용)
