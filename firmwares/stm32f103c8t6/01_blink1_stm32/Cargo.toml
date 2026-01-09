@@ -2,6 +2,7 @@
 name = "blink1_stm32"
 version = "0.1.2"
 edition = "2021"
+authors = ["JR.Kim <jrkim@naver.com>"]
 
 [dependencies]
 cortex-m = "0.7"

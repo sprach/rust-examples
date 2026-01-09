@@ -1,0 +1,17 @@
+[target.xtensa-esp32s3-none-elf]
+runner = "espflash flash --monitor"
+
+[build]
+# rustflags = [
+#   "-C", "force-frame-pointers",
+#   "-Z", "unstable-options",
+#   "-A", "stable-features",
+#   "-A", "internal_features",
+#   "-Z", "allow-features=*",
+# ]
+
+target = "xtensa-esp32s3-none-elf"
+
+[unstable]
+build-std = ["core", "alloc"]
+build-std-features = ["panic_immediate_abort"]

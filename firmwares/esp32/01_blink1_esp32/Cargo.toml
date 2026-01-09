@@ -1,9 +1,22 @@
 [package]
 name = "blink1_esp32"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 
 [dependencies]
-# Minimal deps or just empty is fine for satisfying workspace check usually, 
-# but valid deps prevent resolution errors if cargo tries to resolve all.
-# I'll just put standard meaningless blink deps or empty.
+esp-hal = { version = "1.0.0-rc.3", features = ["esp32s3", "unstable"] }
+esp-backtrace = { version = "0.15.1", features = [
+    "esp32s3",
+    "panic-handler",
+    "println",
+] }
+esp-println = { version = "0.13.1", features = ["esp32s3", "log"] }
+log = { version = "0.4.22" }
+# esp-bootloader-esp-idf = { version = "0.4.0", features = ["esp32s3"] }
+
+[profile.release]
+opt-level = "s"
+lto = 'fat'
+codegen-units = 1
+panic = 'abort'
+strip = true
